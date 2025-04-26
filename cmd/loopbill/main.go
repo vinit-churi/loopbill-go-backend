@@ -10,10 +10,11 @@ import (
 )
 
 func main() {
-	r := gin.Default()
+	// Create a Gin router
+	router := gin.Default()
 	// Define routes here...
 	// Example route:
-	r.GET("/", func(c *gin.Context) {
+	router.GET("/", func(c *gin.Context) {
 		c.String(http.StatusOK, "Hello from Gin over TLS!")
 	})
 
@@ -28,7 +29,7 @@ func main() {
 	// Basic HTTP/1.1 & HTTP/2 server setup with TLS
 	server := &http.Server{
 		Addr:    ":8443", // Port for HTTPS
-		Handler: r,
+		Handler: router,
 		TLSConfig: &tls.Config{
 			Certificates: []tls.Certificate{cert},
 			// Consider adding MinVersion, CipherSuites etc. for better security
