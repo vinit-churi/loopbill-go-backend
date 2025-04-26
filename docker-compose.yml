@@ -1,0 +1,26 @@
+version: '3.8'
+services:
+  loopbill:
+    build: .
+    container_name: loopbill_app
+    environment:
+      - ORACLE_DSN=${ORACLE_DSN}
+      - JWT_SECRET=${JWT_SECRET}
+    networks:
+      - loopbill_net
+
+  haproxy:
+    image: haproxy:2.8-alpine
+    depends_on:
+      - loopbill
+    ports:
+      - '443:443'
+    volumes:
+      - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+      - ./certs/server.pem:/etc/ssl/certs/server.pem:ro
+    networks:
+      - loopbill_net
+
+networks:
+  loopbill_net:
+    driver: bridge
